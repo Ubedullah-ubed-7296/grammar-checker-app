@@ -2,6 +2,11 @@ import streamlit as st
 import nltk
 from nltk import pos_tag
 from nltk.tokenize import word_tokenize
+import nltk
+
+# Set the path to manually placed NLTK data
+nltk.data.path.append(r'C:\Users\Elite Book\AppData\Roaming\nltk_data')
+
 
 # Download required data
 nltk.download('punkt')
