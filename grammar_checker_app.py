@@ -2,7 +2,7 @@ import streamlit as st
 import nltk
 from nltk import pos_tag
 from nltk.tokenize import word_tokenize
-from nltk.data import find
+from nltk.data import find, download
 
 # Function to download the required NLTK data
 def download_nltk_data():
@@ -10,13 +10,15 @@ def download_nltk_data():
         # Check if 'punkt' tokenizer is already downloaded
         find('tokenizers/punkt')
     except LookupError:
-        nltk.download('punkt')
+        st.info("Downloading punkt tokenizer...")
+        download('punkt')  # This will force the download of the 'punkt' tokenizer
 
     try:
         # Check if 'averaged_perceptron_tagger' is already downloaded
         find('taggers/averaged_perceptron_tagger')
     except LookupError:
-        nltk.download('averaged_perceptron_tagger')
+        st.info("Downloading averaged_perceptron_tagger...")
+        download('averaged_perceptron_tagger')  # Force download for the POS tagger
 
 # Add the path to the NLTK data
 nltk.data.path.append(r'C:\Users\Elite Book\AppData\Roaming\nltk_data')
