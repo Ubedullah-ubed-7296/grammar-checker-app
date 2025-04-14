@@ -8,18 +8,30 @@ from nltk.data import find
 st.set_page_config(page_title="Grammar Checker", layout="centered")
 
 # Function to download required NLTK data
+import nltk
+from nltk.data import find
+import streamlit as st
+
 def download_nltk_data():
+    # Download 'punkt' tokenizer
     try:
         find('tokenizers/punkt')
     except LookupError:
-        st.info("Downloading required tokenizer...")
-        download('punkt')
+        try:
+            st.info("Downloading required tokenizer: punkt")
+            nltk.download('punkt', quiet=True, raise_on_error=False)
+        except:
+            st.error("Could not download 'punkt' tokenizer.")
 
+    # Download 'averaged_perceptron_tagger'
     try:
         find('taggers/averaged_perceptron_tagger')
     except LookupError:
-        st.info("Downloading required tagger...")
-        download('averaged_perceptron_tagger')
+        try:
+            st.info("Downloading required tagger: averaged_perceptron_tagger")
+            nltk.download('averaged_perceptron_tagger', quiet=True, raise_on_error=False)
+        except:
+            st.error("Could not download 'averaged_perceptron_tagger'.")
 
 # Download necessary NLTK data
 download_nltk_data()
