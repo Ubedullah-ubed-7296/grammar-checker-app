@@ -1,34 +1,41 @@
-import nltk
 import streamlit as st
-from nltk.tokenize import word_tokenize
+import nltk
 from nltk import pos_tag
+from nltk.tokenize import word_tokenize
+import os
 
-# Ensure that the necessary resources are downloaded
-try:
-    nltk.data.find('tokenizers/punkt')
-except LookupError:
-    nltk.download('punkt')
+# Ensure required NLTK data is downloaded
+def download_nltk_data():
+    try:
+        nltk.data.find('tokenizers/punkt')
+    except LookupError:
+        nltk.download('punkt')
 
-try:
-    nltk.data.find('taggers/averaged_perceptron_tagger')
-except LookupError:
-    nltk.download('averaged_perceptron_tagger')
+    try:
+        nltk.data.find('taggers/averaged_perceptron_tagger')
+    except LookupError:
+        nltk.download('averaged_perceptron_tagger')
 
-# Your existing code
+# Add the specific NLTK data path
+nltk.data.path.append(r'C:\Users\Elite Book\AppData\Roaming\nltk_data')
+
+# Download NLTK data
+download_nltk_data()
+
+# Define grammar rules
+grammar_rules = [
+    (('DT', 'JJ', 'NN'), "OK"),
+    (('DT', 'NN'), "OK"),
+    (('JJ', 'NN'), "OK"),
+    (('NN', 'VB'), "Error"),       
+    (('VB', 'VB'), "Check"),       
+    (('RB', 'RB'), "Check")        
+]
+
 def check_grammar(sentence):
     tokens = word_tokenize(sentence)
     tagged = pos_tag(tokens)
     issues = []
-
-    # Define your grammar rules here
-    grammar_rules = [
-        (('DT', 'JJ', 'NN'), "OK"),
-        (('DT', 'NN'), "OK"),
-        (('JJ', 'NN'), "OK"),
-        (('NN', 'VB'), "Error"),       
-        (('VB', 'VB'), "Check"),       
-        (('RB', 'RB'), "Check")        
-    ]
 
     # Check consecutive pairs
     for i in range(len(tagged) - 1):
@@ -42,6 +49,7 @@ def check_grammar(sentence):
 
 # Streamlit UI
 st.set_page_config(page_title="Grammar Checker", layout="centered")
+
 st.title("📝 Simple Grammar Checker")
 sentence = st.text_area("Enter a sentence to check:", height=150)
 
