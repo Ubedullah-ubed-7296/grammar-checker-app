@@ -1,33 +1,30 @@
 import streamlit as st
 import nltk
-from nltk import pos_tag
+from nltk import pos_tag, download
 from nltk.tokenize import word_tokenize
-from nltk import download
 from nltk.data import find
 
-# Function to download the required NLTK data
+# Set Streamlit page config FIRST
+st.set_page_config(page_title="Grammar Checker", layout="centered")
+
+# Function to download required NLTK data
 def download_nltk_data():
     try:
-        # Check if 'punkt' tokenizer is already downloaded
         find('tokenizers/punkt')
     except LookupError:
-        st.info("Downloading punkt tokenizer...")
-        download('punkt')  # This will force the download of the 'punkt' tokenizer
+        st.info("Downloading required tokenizer...")
+        download('punkt')
 
     try:
-        # Check if 'averaged_perceptron_tagger' is already downloaded
         find('taggers/averaged_perceptron_tagger')
     except LookupError:
-        st.info("Downloading averaged_perceptron_tagger...")
-        download('averaged_perceptron_tagger')  # Force download for the POS tagger
+        st.info("Downloading required tagger...")
+        download('averaged_perceptron_tagger')
 
-# Add the path to the NLTK data
-nltk.data.path.append(r'C:\Users\Elite Book\AppData\Roaming\nltk_data')
-
-# Ensure NLTK data is downloaded
+# Download necessary NLTK data
 download_nltk_data()
 
-# Define grammar rules
+# Grammar rules: (POS tag pairs → status)
 grammar_rules = [
     (('DT', 'JJ', 'NN'), "OK"),
     (('DT', 'NN'), "OK"),
@@ -37,29 +34,24 @@ grammar_rules = [
     (('RB', 'RB'), "Check")        
 ]
 
-# Function to check grammar based on POS tagging
+# Grammar checking function
 def check_grammar(sentence):
     tokens = word_tokenize(sentence)
     tagged = pos_tag(tokens)
     issues = []
 
-    # Check consecutive pairs of POS tags
     for i in range(len(tagged) - 1):
         pair = (tagged[i][1], tagged[i+1][1])
         for rule in grammar_rules:
-            if pair == rule[0]:
+            if pair == rule[0][:2]:
                 if rule[1] != "OK":
                     issues.append((tagged[i][0], tagged[i+1][0], rule[1]))
-
     return tagged, issues
 
-# Streamlit UI setup
-st.set_page_config(page_title="Grammar Checker", layout="centered")
-
+# Streamlit UI
 st.title("📝 Simple Grammar Checker")
 sentence = st.text_area("Enter a sentence to check:", height=150)
 
-# Check grammar when the button is pressed
 if st.button("Check Grammar"):
     if not sentence.strip():
         st.warning("Please enter a sentence.")
