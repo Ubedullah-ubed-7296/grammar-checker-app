@@ -2,7 +2,8 @@ import streamlit as st
 import nltk
 from nltk import pos_tag
 from nltk.tokenize import word_tokenize
-from nltk.data import find, download
+from nltk import download
+from nltk.data import find
 
 # Function to download the required NLTK data
 def download_nltk_data():
