@@ -4,6 +4,9 @@ from nltk import pos_tag
 from nltk.tokenize import word_tokenize
 import os
 
+# Set page configuration before any other Streamlit UI elements
+st.set_page_config(page_title="Grammar Checker", layout="centered")
+
 # Ensure required NLTK data is downloaded
 def download_nltk_data():
     try:
@@ -50,8 +53,6 @@ def check_grammar(sentence):
     return tagged, issues
 
 # Streamlit UI
-st.set_page_config(page_title="Grammar Checker", layout="centered")
-
 st.title("📝 Simple Grammar Checker")
 sentence = st.text_area("Enter a sentence to check:", height=150)
 
