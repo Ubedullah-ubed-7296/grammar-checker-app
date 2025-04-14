@@ -2,10 +2,22 @@ import streamlit as st
 import nltk
 from nltk import pos_tag
 from nltk.tokenize import word_tokenize
+import os
 
-# Download required data
-nltk.download('punkt')
-nltk.download('averaged_perceptron_tagger')
+# Ensure required NLTK data is downloaded
+def download_nltk_data():
+    try:
+        nltk.data.find('tokenizers/punkt')
+    except LookupError:
+        nltk.download('punkt')
+
+    try:
+        nltk.data.find('taggers/averaged_perceptron_tagger')
+    except LookupError:
+        nltk.download('averaged_perceptron_tagger')
+
+# Download NLTK data
+download_nltk_data()
 
 # Define grammar rules
 grammar_rules = [
