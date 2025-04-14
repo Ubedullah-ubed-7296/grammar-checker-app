@@ -2,24 +2,26 @@ import streamlit as st
 import nltk
 from nltk import pos_tag
 from nltk.tokenize import word_tokenize
-import os
+from nltk.data import find
 
-# Add the NLTK data path (your local path)
-nltk.data.path.append(r'C:\Users\Elite Book\AppData\Roaming\nltk_data')
-
-# Ensure required NLTK data is downloaded
+# Function to download the required NLTK data
 def download_nltk_data():
     try:
-        nltk.data.find('tokenizers/punkt')
+        # Check if 'punkt' tokenizer is already downloaded
+        find('tokenizers/punkt')
     except LookupError:
         nltk.download('punkt')
 
     try:
-        nltk.data.find('taggers/averaged_perceptron_tagger')
+        # Check if 'averaged_perceptron_tagger' is already downloaded
+        find('taggers/averaged_perceptron_tagger')
     except LookupError:
         nltk.download('averaged_perceptron_tagger')
 
-# Download NLTK data
+# Add the path to the NLTK data
+nltk.data.path.append(r'C:\Users\Elite Book\AppData\Roaming\nltk_data')
+
+# Ensure NLTK data is downloaded
 download_nltk_data()
 
 # Define grammar rules
@@ -32,12 +34,13 @@ grammar_rules = [
     (('RB', 'RB'), "Check")        
 ]
 
+# Function to check grammar based on POS tagging
 def check_grammar(sentence):
     tokens = word_tokenize(sentence)
     tagged = pos_tag(tokens)
     issues = []
 
-    # Check consecutive pairs
+    # Check consecutive pairs of POS tags
     for i in range(len(tagged) - 1):
         pair = (tagged[i][1], tagged[i+1][1])
         for rule in grammar_rules:
@@ -47,12 +50,13 @@ def check_grammar(sentence):
 
     return tagged, issues
 
-# Streamlit UI
+# Streamlit UI setup
 st.set_page_config(page_title="Grammar Checker", layout="centered")
 
 st.title("📝 Simple Grammar Checker")
 sentence = st.text_area("Enter a sentence to check:", height=150)
 
+# Check grammar when the button is pressed
 if st.button("Check Grammar"):
     if not sentence.strip():
         st.warning("Please enter a sentence.")
