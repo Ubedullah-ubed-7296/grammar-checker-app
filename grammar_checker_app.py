@@ -9,15 +9,17 @@ def download_nltk_data():
     try:
         nltk.data.find('tokenizers/punkt')
     except LookupError:
+        st.write("Downloading 'punkt' tokenizer data...")
         nltk.download('punkt')
 
     try:
         nltk.data.find('taggers/averaged_perceptron_tagger')
     except LookupError:
+        st.write("Downloading 'averaged_perceptron_tagger' tagger data...")
         nltk.download('averaged_perceptron_tagger')
 
 # Add the specific NLTK data path
-nltk.data.path.append(r'C:\Users\Elite Book\AppData\Roaming\nltk_data')
+nltk.data.path.append(r'/root/nltk_data')  # This is a typical path on Streamlit Cloud or Docker-based environments
 
 # Download NLTK data
 download_nltk_data()
