@@ -4,6 +4,9 @@ from nltk import pos_tag
 from nltk.tokenize import word_tokenize
 import os
 
+# Add the NLTK data path (your local path)
+nltk.data.path.append(r'C:\Users\Elite Book\AppData\Roaming\nltk_data')
+
 # Ensure required NLTK data is downloaded
 def download_nltk_data():
     try:
@@ -15,9 +18,6 @@ def download_nltk_data():
         nltk.data.find('taggers/averaged_perceptron_tagger')
     except LookupError:
         nltk.download('averaged_perceptron_tagger')
-
-# Add the NLTK data path (your local path)
-nltk.data.path.append(r'C:\Users\Elite Book\AppData\Roaming\nltk_data')
 
 # Download NLTK data
 download_nltk_data()
